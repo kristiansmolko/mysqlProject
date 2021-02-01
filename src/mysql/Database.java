@@ -43,27 +43,42 @@ public class Database {
 
     public Country getCountryInfo(String country){
         String query = "SELECT country.Name, Code, city.Name, " +
+                "Language, " +
                 "JSON_UNQUOTE(JSON_EXTRACT(doc, '$.geography.Continent')) AS Continent, " +
                 "JSON_EXTRACT(doc, '$.geography.SurfaceArea') AS SurfaceArea " +
                 "FROM country " +
                 "INNER JOIN city ON city.ID = country.Capital " +
                 "INNER JOIN countryinfo ON country.Code = countryinfo._id " +
-                "WHERE country.Name LIKE ?";
+                "INNER JOIN countrylanguage ON country.Code = countrylanguage.CountryCode " +
+                "WHERE country.Name LIKE ? AND IsOfficial = 'T'";
         Country countryInfo = null;
+        String code3 = null, capital = null, continent = null;
+        int area = 0;
+        List<String> languages = new ArrayList<>(); //create list
         try {
             Connection connection = getConnection();
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, country);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
-                String code3 = rs.getString("Code");
-                String capital = rs.getString("city.Name");
-                String continent = rs.getString("Continent");
-                int area = rs.getInt("SurfaceArea");
-                countryInfo = new Country(country, code3, capital, area, continent);
-            } else
-                System.out.println("This country doesn't exist");
-
+            while (rs.next()) { //search for countries especially languages
+                code3 = rs.getString("Code");
+                capital = rs.getString("city.Name");
+                continent = rs.getString("Continent");
+                area = rs.getInt("SurfaceArea");
+                //add language to list
+                languages.add(rs.getString("Language"));
+            }
+            if (code3 == null && capital == null && continent == null) {
+                //if there is no code, capital and continent
+                System.out.println("This country does not exist!");
+                connection.close();
+                //return null (can be changed later)
+                return null;
+            } else {
+                //otherwise return countryInfo like it should look like
+                countryInfo = new Country(country, code3, capital, area, continent, languages);
+            }
+            connection.close();
         } catch (Exception e) {e.printStackTrace();}
         return countryInfo;
     }
