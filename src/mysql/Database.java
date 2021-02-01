@@ -60,9 +60,9 @@ public class Database {
                 String capital = rs.getString("city.Name");
                 String continent = rs.getString("Continent");
                 int area = rs.getInt("SurfaceArea");
-                System.out.println(code3 + " " + capital + " " + continent + " " + area);
                 countryInfo = new Country(country, code3, capital, area, continent);
-            }
+            } else
+                System.out.println("This country doesn't exist");
 
         } catch (Exception e) {e.printStackTrace();}
         return countryInfo;
