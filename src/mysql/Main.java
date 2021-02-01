@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         Database dat = new Database();
         Output out = new Output();
-        String countryName = "Slovakia";
+        String countryName = "Afghanistan";
         Country country = dat.getCountryInfo(countryName);
         out.printCountryInfo(country);
         List<City> cities = dat.getCities(countryName);
