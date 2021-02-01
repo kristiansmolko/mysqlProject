@@ -7,8 +7,9 @@ import java.util.List;
 
 public class Output {
     public void printCities(List<City> cities){
+        System.out.println("List of cities: ");
         for (City city : cities)
-            System.out.println(city.getName() + " ( " + city.getPopulation() + " )");
+            System.out.println("        - " + city.getName() + " ( " + city.getPopulation() + " )");
 
     }
 
