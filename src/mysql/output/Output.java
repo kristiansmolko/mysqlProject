@@ -18,6 +18,13 @@ public class Output {
         System.out.println("Capital: " + country.getCapitalCity());
         System.out.println("Code: " + country.getCode3());
         System.out.println("Continent: " + country.getContinent());
-        System.out.println("Surface Area: " + country.getArea());
+        System.out.println("Surface area: " + country.getArea());
+        System.out.println("Official languages: ");
+        for (int i = 0; i < country.getLanguages().size(); i++){
+            if (i == country.getLanguages().size()-1)
+                System.out.print(country.getLanguages().get(i));
+            else
+                System.out.print(country.getLanguages().get(i) + ", ");
+        }
     }
 }
