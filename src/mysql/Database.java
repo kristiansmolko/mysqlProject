@@ -1,11 +1,9 @@
 package mysql;
 
 import mysql.entity.City;
+import mysql.entity.Country;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +16,8 @@ public class Database {
                 "INNER JOIN country ON country.Code = city.CountryCode " +
                 "WHERE country.Name LIKE ? ORDER BY Population DESC";
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            //connect
-            Connection connection = DriverManager.getConnection(DatabaseID.getUrl(), DatabaseID.getUsername(), DatabaseID.getPassword());
+            Connection connection = getConnection();
             if (connection != null) {
-                System.out.println("Success");
                 //make statement
                 PreparedStatement ps = connection.prepareStatement(query);
                 //insert, update, delete executeUpdate
@@ -39,5 +34,39 @@ public class Database {
             }
         }catch (Exception e) { e.printStackTrace(); }
         return cities;
+    }
+
+    private Connection getConnection() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        //connect
+        Connection connection = DriverManager.getConnection(DatabaseID.getUrl(), DatabaseID.getUsername(), DatabaseID.getPassword());
+        return connection;
+    }
+
+    public Country getCountryInfo(String country){
+        String query = "SELECT country.Name, Code, city.Name, " +
+                "JSON_EXTRACT(doc, '$.geography.Continent') AS Continent, " +
+                "JSON_EXTRACT(doc, '$.geography.SurfaceArea') AS SurfaceArea " +
+                "FROM country " +
+                "INNER JOIN city ON city.ID = country.Capital " +
+                "INNER JOIN countryinfo ON country.Code = countryinfo._id " +
+                "WHERE country.Name LIKE ?";
+        Country countryInfo = null;
+        try {
+            Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, country);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                String code3 = rs.getString("Code");
+                String capital = rs.getString("city.Name");
+                String continent = rs.getString("Continent");
+                int area = rs.getInt("SurfaceArea");
+                System.out.println(code3 + " " + capital + " " + continent + " " + area);
+                countryInfo = new Country(country, code3, capital, area, continent);
+            }
+
+        } catch (Exception e) {e.printStackTrace();}
+        return countryInfo;
     }
 }
