@@ -43,7 +43,7 @@ public class Database {
 
     public Country getCountryInfo(String country){
         String query = "SELECT country.Name, Code, city.Name, " +
-                "JSON_EXTRACT(doc, '$.geography.Continent') AS Continent, " +
+                "JSON_UNQUOTE(JSON_EXTRACT(doc, '$.geography.Continent')) AS Continent, " +
                 "JSON_EXTRACT(doc, '$.geography.SurfaceArea') AS SurfaceArea " +
                 "FROM country " +
                 "INNER JOIN city ON city.ID = country.Capital " +

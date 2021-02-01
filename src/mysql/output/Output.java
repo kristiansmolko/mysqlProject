@@ -16,7 +16,7 @@ public class Output {
         System.out.println("Country: " + country.getName());
         System.out.println("Capital: " + country.getCapitalCity());
         System.out.println("Code: " + country.getCode3());
-        System.out.println("Continent: " + country.getContinent().replace("\"", ""));
+        System.out.println("Continent: " + country.getContinent());
         System.out.println("Surface Area: " + country.getArea());
     }
 }
