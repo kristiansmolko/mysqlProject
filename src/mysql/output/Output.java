@@ -7,13 +7,15 @@ import java.util.List;
 
 public class Output {
     public void printCities(List<City> cities){
+        System.out.println("\n------------------------------------");
         System.out.println("List of cities: ");
         for (City city : cities)
             System.out.println("        - " + city.getName() + " ( " + city.getPopulation() + " )");
-
+        System.out.println("--------------------------------------");
     }
 
     public void printCountryInfo(Country country){
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("Country: " + country.getName());
         System.out.println("Capital: " + country.getCapitalCity());
         System.out.println("Code: " + country.getCode3());
