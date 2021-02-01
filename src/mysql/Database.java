@@ -1,13 +1,18 @@
 package mysql;
 
+import mysql.entity.City;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
-    public void showCities(String country){
+    public List<City> getCities(String country){
         //prepare statement
+        List<City> cities = new ArrayList<>();
         String query = "SELECT city.Name, JSON_EXTRACT(Info, '$.Population') AS Population " +
                 "FROM city " +
                 "INNER JOIN country ON country.Code = city.CountryCode " +
@@ -25,12 +30,14 @@ public class Database {
                 ps.setString(1, country);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()){
-                    String city = rs.getString("Name");
+                    String name = rs.getString("Name");
                     int pop = rs.getInt("Population");
-                    System.out.println(city + " ( " + pop + " )");
+                    City newCity = new City(name, pop);
+                    cities.add(newCity);
                 }
                 connection.close();
             }
         }catch (Exception e) { e.printStackTrace(); }
+        return cities;
     }
 }
