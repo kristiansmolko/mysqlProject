@@ -8,10 +8,10 @@ import java.sql.ResultSet;
 public class Database {
     public void showCities(String country){
         //prepare statement
-        String query = "SELECT city.Name, CountryCode " +
+        String query = "SELECT city.Name, JSON_EXTRACT(Info, '$.Population') AS Population " +
                 "FROM city " +
                 "INNER JOIN country ON country.Code = city.CountryCode " +
-                "WHERE country.Name LIKE ?";
+                "WHERE country.Name LIKE ? ORDER BY Population DESC";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             //connect
@@ -23,12 +23,11 @@ public class Database {
                 //insert, update, delete executeUpdate
                 //store to ResultSet
                 ps.setString(1, country);
-                System.out.println(ps);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()){
                     String city = rs.getString("Name");
-                    String code = rs.getString("CountryCode");
-                    System.out.println(city + " " + code);
+                    int pop = rs.getInt("Population");
+                    System.out.println(city + " ( " + pop + " )");
                 }
                 connection.close();
             }
