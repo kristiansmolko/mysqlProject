@@ -1,6 +1,7 @@
 package mysql;
 
 import mysql.entity.City;
+import mysql.entity.Country;
 import mysql.output.Output;
 
 import java.util.List;
@@ -8,8 +9,10 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         Database dat = new Database();
-        List<City> cities = dat.getCities("Italy");
         Output out = new Output();
-        out.printCities(cities);
+        Country country = dat.getCountryInfo("Italy");
+        out.printCountryInfo(country);
+        List<City> cities = dat.getCities("Italy");
+        //out.printCities(cities);
     }
 }
