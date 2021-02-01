@@ -10,9 +10,10 @@ public class Main {
     public static void main(String[] args) {
         Database dat = new Database();
         Output out = new Output();
-        Country country = dat.getCountryInfo("Italy");
+        String countryName = "Slovakia";
+        Country country = dat.getCountryInfo(countryName);
         out.printCountryInfo(country);
-        List<City> cities = dat.getCities("Italy");
-        //out.printCities(cities);
+        List<City> cities = dat.getCities(countryName);
+        out.printCities(cities);
     }
 }
