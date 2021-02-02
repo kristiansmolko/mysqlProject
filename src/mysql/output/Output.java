@@ -7,15 +7,19 @@ import java.util.List;
 
 public class Output {
     public void printCities(List<City> cities){
-        System.out.println("\n------------------------------------");
+        if (cities == null || cities.size() == 0)
+            return;
+        System.out.println("\033[33m------------------------------------\033[0m");
         System.out.println("List of cities: ");
         for (City city : cities)
             System.out.println("        - " + city.getName() + " ( " + city.getPopulation() + " )");
-        System.out.println("--------------------------------------");
+        System.out.println("\033[33m--------------------------------------\033[0m");
     }
 
     public void printCountryInfo(Country country){
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        if (country == null)
+            return;
+        System.out.println("\033[35m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\033[0m");
         System.out.println("Country: " + country.getName());
         System.out.println("Capital: " + country.getCapitalCity());
         System.out.println("Code: " + country.getCode3());
@@ -28,5 +32,6 @@ public class Output {
             else
                 System.out.print(country.getLanguages().get(i) + ", ");
         }
+        System.out.println();
     }
 }
