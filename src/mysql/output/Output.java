@@ -21,10 +21,10 @@ public class Output {
             return;
         System.out.println("\033[35m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\033[0m");
         System.out.println("Country: " + country.getName());
-        System.out.println("Capital: " + country.getCapitalCity());
+        System.out.println("Capital: \033[32m" + country.getCapitalCity() + "\033[0m");
         System.out.println("Code: " + country.getCode3());
         System.out.println("Continent: " + country.getContinent());
-        System.out.println("Surface area: " + country.getArea());
+        System.out.println("Surface area: " + country.getArea() + " km" + (char)(178));
         System.out.println("Official languages: ");
         for (int i = 0; i < country.getLanguages().size(); i++){
             if (i == country.getLanguages().size()-1)
