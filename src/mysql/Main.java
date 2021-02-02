@@ -15,5 +15,7 @@ public class Main {
         out.printCountryInfo(country);
         List<City> cities = dat.getCities(countryName);
         out.printCities(cities);
+        City newCity = new City("Ploske", 68, "Revuca Okres", "Slovakia");
+        //dat.insertCity(newCity);
     }
 }
