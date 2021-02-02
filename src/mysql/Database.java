@@ -61,23 +61,25 @@ public class Database {
         List<String> languages = new ArrayList<>(); //create list
         try {
             Connection connection = getConnection();
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, country);
-            ResultSet rs = ps.executeQuery();
-            if (getCountryCode(country) == null) {
-                System.out.println("\033[31mWrong country!\033[0m");
-                return null;
+            if (connection != null) {
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setString(1, country);
+                ResultSet rs = ps.executeQuery();
+                if (getCountryCode(country) == null) {
+                    System.out.println("\033[31mWrong country!\033[0m");
+                    return null;
+                }
+                while (rs.next()) { //search for countries especially languages
+                    code3 = rs.getString("Code");
+                    capital = rs.getString("city.Name");
+                    continent = rs.getString("Continent");
+                    area = rs.getInt("SurfaceArea");
+                    //add language to list
+                    languages.add(rs.getString("Language"));
+                }
+                countryInfo = new Country(country, code3, capital, area, continent, languages);
+                connection.close();
             }
-            while (rs.next()) { //search for countries especially languages
-                code3 = rs.getString("Code");
-                capital = rs.getString("city.Name");
-                continent = rs.getString("Continent");
-                area = rs.getInt("SurfaceArea");
-                //add language to list
-                languages.add(rs.getString("Language"));
-            }
-            countryInfo = new Country(country, code3, capital, area, continent, languages);
-            connection.close();
         } catch (Exception e) {e.printStackTrace();}
         return countryInfo;
     }
@@ -88,14 +90,44 @@ public class Database {
         String query = "SELECT Code FROM country WHERE Name LIKE ?";
         try {
             Connection connection = getConnection();
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, country);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next())
-                return rs.getString("Code");
+            if (connection != null) {
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setString(1, country);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    String code = rs.getString("Code");
+                    connection.close();
+                    return code;
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void insertCity(City newCity){
+        String country = newCity.getCountry();
+        String code3 = getCountryCode(country);
+        if (code3 == null)
+            System.out.println("\033[31mWarning! Country " + country + " does not exist!\033[0m");
+        else{
+            newCity.setCode3(code3);
+            String query = "INSERT INTO city (Name, CountryCode, District, Info) " +
+                    "VALUES(?, ?, ?, ?)";
+            try {
+                Connection connection = getConnection();
+                if (connection != null) {
+                    PreparedStatement ps = connection.prepareStatement(query);
+                    ps.setString(1, newCity.getName());
+                    ps.setString(2, newCity.getCode3());
+                    ps.setString(3, newCity.getDistrict());
+                    String json = "{\"Population\": " + newCity.getPopulation() + "}";
+                    ps.setString(4, json);
+                    ps.executeUpdate();
+                    connection.close();
+                }
+            } catch (Exception e) { e.printStackTrace(); }
+        }
     }
 }
