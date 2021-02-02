@@ -24,6 +24,10 @@ public class Database {
                 //store to ResultSet
                 ps.setString(1, country);
                 ResultSet rs = ps.executeQuery();
+                if (getCountryCode(country) == null){
+                    System.out.println("\033[31mWrong country!\033[31m");
+                    return null;
+                }
                 while (rs.next()){
                     String name = rs.getString("Name");
                     int pop = rs.getInt("Population");
@@ -60,6 +64,10 @@ public class Database {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, country);
             ResultSet rs = ps.executeQuery();
+            if (getCountryCode(country) == null) {
+                System.out.println("\033[31mWrong country!\033[0m");
+                return null;
+            }
             while (rs.next()) { //search for countries especially languages
                 code3 = rs.getString("Code");
                 capital = rs.getString("city.Name");
@@ -68,18 +76,26 @@ public class Database {
                 //add language to list
                 languages.add(rs.getString("Language"));
             }
-            if (code3 == null && capital == null && continent == null) {
-                //if there is no code, capital and continent
-                System.out.println("This country does not exist!");
-                connection.close();
-                //return null (can be changed later)
-                return null;
-            } else {
-                //otherwise return countryInfo like it should look like
-                countryInfo = new Country(country, code3, capital, area, continent, languages);
-            }
+            countryInfo = new Country(country, code3, capital, area, continent, languages);
             connection.close();
         } catch (Exception e) {e.printStackTrace();}
         return countryInfo;
+    }
+
+    public String getCountryCode(String country){
+        if (country == null || country.equalsIgnoreCase(""))
+            return null;
+        String query = "SELECT Code FROM country WHERE Name LIKE ?";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, country);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+                return rs.getString("Code");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
