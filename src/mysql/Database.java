@@ -172,13 +172,26 @@ public class Database {
                     System.out.println("\033[31mBad number!\033[0m");
                     return;
                 }
+                int previousPop = getPreviousPop(country, city);
                 String json = "{\"Population\": " + pop + "}";
                 PreparedStatement ps = connection.prepareStatement(query);
                 ps.setString(1, json);
                 ps.setString(2, city);
                 ps.executeUpdate();
+                System.out.println("\033[32mSuccessfully updated population of " + city + " from " + previousPop + " to " + pop + ".\033[0m");
                 connection.close();
             }
         } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private int getPreviousPop(String country, String city) {
+        int previousPop = 0;
+        for (City city1 : getCities(country)){
+            if (city1.getName().equals(city)) {
+                previousPop = city1.getPopulation();
+                break;
+            }
+        }
+        return previousPop;
     }
 }
