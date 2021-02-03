@@ -85,8 +85,10 @@ public class Database {
     }
 
     public String getCountryCode(String country){
-        if (country == null || country.equalsIgnoreCase(""))
+        if (country == null || country.equalsIgnoreCase("")) {
+            System.out.println("\033[31mWrong country name!\033[0m");
             return null;
+        }
         String query = "SELECT Code FROM country WHERE Name LIKE ?";
         try {
             Connection connection = getConnection();
@@ -129,5 +131,54 @@ public class Database {
                 }
             } catch (Exception e) { e.printStackTrace(); }
         }
+    }
+
+    public boolean isCityInCountry(String city, String country){
+        String query = "SELECT Name, CountryCode from city " +
+                "WHERE CountryCode LIKE ?";
+        try {
+            Connection connection = getConnection();
+            if (connection != null){
+                String code = getCountryCode(country);
+                if (code == null) {
+                    System.out.println("\033[31mWrong country name!\033[0m");
+                    return false;
+                }
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setString(1, code);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    if (city.equalsIgnoreCase(rs.getString("Name")))
+                        return true;
+                }
+                connection.close();
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return false;
+    }
+
+    public void updatePopulation(String country, String city, int pop){
+        String query = "UPDATE city " +
+                "SET Info = ? " +
+                "WHERE Name like ?";
+        try {
+            Connection connection = getConnection();
+            if (connection != null) {
+                if (!isCityInCountry(city, country)) {
+                    System.out.println("\033[31mWrong country or city name!\033[0m");
+                    return;
+                }
+                if (pop <= 0){
+                    System.out.println("\033[31mBad number!\033[0m");
+                    return;
+                }
+                String json = "{\"Population\": " + pop + "}";
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setString(1, json);
+                ps.setString(2, city);
+                ps.executeUpdate();
+                connection.close();
+            }
+        } catch (Exception e) { e.printStackTrace(); }
     }
 }
