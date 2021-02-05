@@ -1,9 +1,7 @@
 package mysql.entity;
 
 public class CapitalCity extends City {
-    private String city;
     private String country;
-    private int pop;
 
     public CapitalCity(String city, String country, int pop) {
         super(city, pop);
