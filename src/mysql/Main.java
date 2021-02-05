@@ -1,5 +1,6 @@
 package mysql;
 
+import mysql.entity.CapitalCity;
 import mysql.entity.City;
 import mysql.entity.Country;
 import mysql.output.Output;
@@ -17,6 +18,8 @@ public class Main {
         out.printCities(cities);*/
         /*City newCity = new City("Ploske", 68, "Revuca Okres", "Slovakia");
         dat.insertCity(newCity);*/
-        dat.updatePopulation("Slovakia", "Ploske", 69);
+        //dat.updatePopulation("Slovakia", "Ploske", 68);
+        List<CapitalCity> capitalCityList = dat.getCapitalCities("Europe");
+        dat.printCapitalCities(capitalCityList);
     }
 }
