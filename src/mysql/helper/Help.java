@@ -2,6 +2,7 @@ package mysql.helper;
 
 import mysql.DatabaseID;
 import mysql.entity.City;
+import mysql.entity.Monument;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -164,6 +165,29 @@ public class Help {
             }
         } catch (Exception e) { e.printStackTrace(); }
         return null;
+    }
+
+    public static List<Monument> getMonuments(){
+        String query = "SELECT monument.id, monument.name, city.Name, country.Name " +
+                "FROM monument " +
+                "INNER JOIN city ON city.ID = monument.city " +
+                "INNER JOIN country ON country.Code = city.CountryCode";
+        List<Monument> monuments = new ArrayList<>();
+        try {
+            Connection connection = getConnection();
+            if (connection != null){
+                PreparedStatement ps = connection.prepareStatement(query);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    String name = rs.getString("monument.name");
+                    String cityName = rs.getString("city.Name");
+                    String countryName = rs.getString("country.Name");
+                    int id = rs.getInt("monument.id");
+                    monuments.add(new Monument(id, cityName, countryName, name));
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return monuments;
     }
 
 }
