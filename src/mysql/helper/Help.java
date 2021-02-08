@@ -146,6 +146,7 @@ public class Help {
                         return rs.getInt("ID");
                     }
                 }
+                connection.close();
             }
         } catch (Exception e) { e.printStackTrace(); }
         return null;
@@ -169,6 +170,7 @@ public class Help {
                     int id = rs.getInt("monument.id");
                     monuments.add(new Monument(id, cityName, countryName, name));
                 }
+                connection.close();
             }
         } catch (Exception e) { e.printStackTrace(); }
         return monuments;

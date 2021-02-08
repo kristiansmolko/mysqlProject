@@ -144,6 +144,7 @@ public class Database {
                     int pop = rs.getInt("Population");
                     return new CapitalCity(name, country, pop);
                 }
+                connection.close();
             }
         } catch (Exception e) { e.printStackTrace(); }
         return null;
@@ -180,6 +181,7 @@ public class Database {
                 ps.setInt(2, getCityId(city));
                 ps.executeUpdate();
                 System.out.println("Added " + name + " to " + city + " with ID: " + getCityId(city));
+                connection.close();
             }
         } catch (Exception e) { e.printStackTrace(); }
 
