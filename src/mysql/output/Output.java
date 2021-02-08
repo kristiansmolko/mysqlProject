@@ -3,6 +3,7 @@ package mysql.output;
 import mysql.entity.CapitalCity;
 import mysql.entity.City;
 import mysql.entity.Country;
+import mysql.entity.Monument;
 
 import java.util.List;
 
@@ -39,6 +40,12 @@ public class Output {
     public void printCapitalCities(List <CapitalCity> list){
         for (CapitalCity cap : list){
             System.out.println(cap.getCountry() + " -> " + cap.getName() + " -> " + cap.getPopulation());
+        }
+    }
+
+    public void printMonuments(List<Monument> list){
+        for (Monument monument : list){
+            System.out.println(monument.getId() + ". " + monument.getMonumentName() + " in " + monument.getCityName() + ", " + monument.getCountryName());
         }
     }
 }
