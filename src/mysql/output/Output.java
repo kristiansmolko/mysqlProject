@@ -1,5 +1,6 @@
 package mysql.output;
 
+import mysql.entity.CapitalCity;
 import mysql.entity.City;
 import mysql.entity.Country;
 
@@ -33,5 +34,11 @@ public class Output {
                 System.out.print(country.getLanguages().get(i) + ", ");
         }
         System.out.println();
+    }
+
+    public void printCapitalCities(List <CapitalCity> list){
+        for (CapitalCity cap : list){
+            System.out.println(cap.getCountry() + " -> " + cap.getName() + " -> " + cap.getPopulation());
+        }
     }
 }
