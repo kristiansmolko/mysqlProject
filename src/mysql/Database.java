@@ -158,8 +158,8 @@ public class Database {
     }
 
     public boolean insertNewMonument(String code3, String city, String name){
-        String query = "INSERT INTO monument(id, name, city) " +
-                "VALUES(?, ?, ?)";
+        String query = "INSERT INTO monument(name, city) " +
+                "VALUES(?, ?)";
         if (city == null || code3 == null || code3.equalsIgnoreCase("") || city.equals("")){
             System.out.println("\033[31mIncorrect city or country!\033[0m");
             return false;
@@ -176,12 +176,10 @@ public class Database {
             Connection connection = getConnection();
             if (connection != null) {
                 PreparedStatement ps = connection.prepareStatement(query);
-                int monumentId = getMonumentId() + 1;
-                ps.setInt(1, monumentId);
-                ps.setString(2, name);
-                ps.setInt(3, getCityId(city));
+                ps.setString(1, name);
+                ps.setInt(2, getCityId(city));
                 ps.executeUpdate();
-                System.out.println("Added " + monumentId + ". " + name + " in " + city + " with ID: " + getCityId(city));
+                System.out.println("Added " + name + " to " + city + " with ID: " + getCityId(city));
             }
         } catch (Exception e) { e.printStackTrace(); }
 
