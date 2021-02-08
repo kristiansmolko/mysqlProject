@@ -131,22 +131,6 @@ public class Help {
         return previousPop;
     }
 
-    public static int getMonumentId(){
-        String query = "SELECT * FROM monument";
-        int count = 0;
-        try {
-            Connection connection = getConnection();
-            if (connection != null) {
-                PreparedStatement ps = connection.prepareStatement(query);
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    count = rs.getInt("id");
-                }
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-        return count;
-    }
-
     public static Integer getCityId(String city){
         String query = "SELECT ID, Name " +
                 "FROM city " +
