@@ -26,7 +26,7 @@ public class Main {
         /*List<CapitalCity> capitalCityList = dat.getCapitalCities("Asia");
         out.printCapitalCities(capitalCityList);*/
 
-        //dat.insertNewMonument("svk", "Kosice", "Dom sv. Alzbety");
+        //dat.insertNewMonument("gbr", "London", "London Eye");
         List<Monument> monuments = Help.getMonuments();
         out.printMonuments(monuments);
     }
