@@ -5,6 +5,7 @@ import mysql.entity.City;
 import mysql.entity.Country;
 import mysql.entity.Monument;
 import mysql.helper.Help;
+import mysql.json.Server;
 import mysql.output.Output;
 
 import java.util.List;
@@ -27,7 +28,12 @@ public class Main {
         out.printCapitalCities(capitalCityList);*/
 
         //dat.insertNewMonument("gbr", "London", "London Eye");
-        List<Monument> monuments = Help.getMonuments();
-        out.printMonuments(monuments);
+
+        /*List<Monument> monuments = Help.getMonuments();
+        out.printMonuments(monuments);*/
+
+        Server server = new Server();
+        String json = "{\"country\":\"Russian Federation\",\"city\":\"Moscow\",\"monument\":\"Kremlin\"}";
+        System.out.println(server.insertNewMonument(json));
     }
 }
